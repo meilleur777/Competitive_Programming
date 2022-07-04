@@ -1,0 +1,19 @@
+<snippet>
+	<name>basic code</name>
+	<content><![CDATA[#include <bits/stdc++.h>
+#define rep(i, n) for(int i=0; i<(n); i++)
+using namespace std;
+
+typedef long long ll;
+typedef pair<int, int> intp;
+
+int main() {
+	${1}
+
+	return 0;
+}
+
+]]></content>
+	<tabTrigger>cp</tabTrigger>
+	<scope>(source.c++ | source.objc++)</scope>
+</snippet>
