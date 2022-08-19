@@ -6,8 +6,11 @@ int main() {
 
 	int n;
 	cin >> n;
-	cout << (int)pow(2, n)-1 << '\n';
-	if (n>20) return;
+	string ans=to_string(pow(2, n));
+	ans=ans.substr(0, ans.find('.'));
+	ans.back()--;
+	cout << ans << '\n';
+    
 	function<void(int, int, int, int)> hanoi=[&](int a, int b, int c, int now) {
 		if (now==1) {
 			cout << a << ' ' << c << '\n';
@@ -17,7 +20,7 @@ int main() {
 		hanoi(a, b, c, 1);
 		hanoi(b, a, c, now-1);
 	};
-	hanoi(1, 2, 3, n);
+	if (n<=20) hanoi(1, 2, 3, n);
 
 	return 0;
 }
