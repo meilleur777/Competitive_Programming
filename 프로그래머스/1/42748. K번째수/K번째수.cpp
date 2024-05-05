@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//Implementation
 vector<int> solution(vector<int> array, vector<vector<int>> commands) {
 
     vector<int> ret;
