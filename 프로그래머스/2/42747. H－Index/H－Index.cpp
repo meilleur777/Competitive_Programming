@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Implementation
+//Bruteforce
 int solution(vector<int> citations) {
 
     int ret=0;
