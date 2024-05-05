@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//Map
 string solution(vector<string> par, vector<string> com) {
     map<string, int> mp;
     for (auto s:com) {
