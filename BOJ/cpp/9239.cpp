@@ -4,11 +4,21 @@ using namespace std;
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
     
-    long double x;
-    cin >> x;
-    long long xx=10000*x;
+    const long long g10=1e4;
+    string s;
+    cin >> s;
+    long long xx;
+    if (s.find('.')!=string::npos) {
+        string integer=s.substr(0, s.find('.'));
+        string fractional=s.substr(s.find('.')+1);
+        fractional=fractional+string((4-(int)fractional.length()), '0');
+        xx=stoll(integer)*g10+stoll(fractional);
+    }
+    else {
+        xx=stoll(s)*g10;
+    }
 
-    if (xx>=100000) {
+    if (xx>=10*g10) {
         cout << "No solution";
         return 0;
     }
@@ -19,17 +29,15 @@ int main() {
 
             long long power=(long long)pow(10, k);
 
-            if (!(a*(xx*power-10000)%(100000-xx))) {
-                long long b=(a*(xx*power-10000)/(100000-xx));
+            if (a*(xx*power-g10)%(10*g10-xx)==0) {
+                long long b=(a*(xx*power-g10)/(10*g10-xx));
                 long long m=b*10+a;
                 long long n=a*power+b;
+
                 string nn=to_string(n);
                 string mm=nn.substr(1)+nn.front();
-                // cout << n << ' ' << m << '\n';
-                // cout << nn << ' ' << mm << '\n';
                 if (to_string(m)!=mm) continue;
-                // if ((int)to_string(b).length()<k) continue;
-                // if (b<(long long)pow(10, k-1) || b>=(long long)pow(10, k)) continue;
+
                 cnt++;
                 cout << n << '\n';
             }

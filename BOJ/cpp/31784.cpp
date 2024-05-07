@@ -9,10 +9,7 @@ int main() {
     cin >> n >> k >> s;
     for (int i=0; i<(int)(s.size()); i++) {
         if (s[i]=='A') continue;
-        if ('Z'+1-s[i]>k) {
-
-        }
-        else {
+        if ('Z'+1-s[i]<=k) {
             k-='Z'+1-s[i];
             s[i]='A';
         }
