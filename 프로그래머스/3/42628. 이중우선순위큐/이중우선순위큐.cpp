@@ -18,42 +18,30 @@ vector<int> solution(vector<string> operations) {
         }
         else if (o=='D') {
             if (num==1) {
-                while (erasemxq.empty()==false && erasemxq.top()==mxq.top()) {
-                    mxq.pop();
-                    erasemxq.pop();
-                }
                 if (mxq.empty()==true) continue;
                 erasemnq.push(mxq.top());
                 mxq.pop();
             }
             else if (num==-1) {
-                while (erasemnq.empty()==false && erasemnq.top()==mnq.top()) {
-                    mnq.pop();
-                    erasemnq.pop();
-                }
                 if (mnq.empty()==true) continue;
                 erasemxq.push(mnq.top());
                 mnq.pop();
             }
         }
-    }
 
-    while (erasemxq.empty()==false && erasemxq.top()==mxq.top()) {
-        mxq.pop();
-        erasemxq.pop();
-    }
-    while (erasemnq.empty()==false && erasemnq.top()==mnq.top()) {
-        mnq.pop();
-        erasemnq.pop();
+        while (erasemnq.empty()==false && erasemnq.top()==mnq.top()) {
+            mnq.pop();
+            erasemnq.pop();
+        }
+        while (erasemxq.empty()==false && erasemxq.top()==mxq.top()) {
+            mxq.pop();
+            erasemxq.pop();
+        }
     }
 
     vector<int> ret;
-    if (mxq.empty()) {
-        ret={0, 0};
-    }
-    else {
-        ret={mxq.top(), mnq.top()};
-    }
+    if (mxq.empty()) ret={0, 0};
+    else ret={mxq.top(), mnq.top()};
 
     return ret;
 }
