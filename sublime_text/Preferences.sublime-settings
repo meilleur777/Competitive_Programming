@@ -1,9 +1,14 @@
 {
-	"theme": "Monokai Pro (Filter Spectrum).sublime-theme",
+	"theme": "Adaptive.sublime-theme",
 	"ignored_packages":
 	[
 		"Vintage",
 	],
-	"color_scheme": "Monokai Pro (Filter Spectrum).sublime-color-scheme",
-	"font_size": 16,
+	"color_scheme": "Breakers.sublime-color-scheme",
+	"font_size": 14,
+	"index_files": true,
+	"dark_theme": "Adaptive.sublime-theme",
+	"light_theme": "Default.sublime-theme",
+	"dark_color_scheme": "Mariana.sublime-color-scheme",
+	"light_color_scheme": "Breakers.sublime-color-scheme",
 }
