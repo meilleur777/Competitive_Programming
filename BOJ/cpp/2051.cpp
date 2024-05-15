@@ -51,7 +51,7 @@ int main() {
     }
 
     //If node is unmateched in Left, assign cover node B in Right
-    //matched node in Left with node B should not be in vetex cover
+    //the node in Left that matches node B should not be in vetex cover
     //After finding all such node B, all uncovered nodes in Left should be in vertex cover
     vector<bool> inCoverL(n, false);
     vector<bool> inCoverR(m, false);
