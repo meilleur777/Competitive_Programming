@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int height(char c) {
+int height(const char& c) {
     if (c=='.' || c=='P' || c=='B') return 0;
     if (c=='1') return 1;
     return 2;
@@ -24,97 +24,117 @@ int main() {
 
     int compNum=0;
     vector<vector<int>> comp(n, vector<int>(m, -1));
-    function<void(int, int)> makeComp=[&](int y, int x) {
-        comp[y][x]=compNum;
-
-        for (int d=0; d<4; d++) {
-            int ny=y+dy[d];
-            int nx=x+dx[d];
-            if (ny>=n || ny<0 || nx>=m || nx<0) continue;
-            if (height(brd[y][x])!=height(brd[ny][nx])) continue;
-            if (comp[ny][nx]!=-1) continue;
-
-            makeComp(ny, nx);
-        }
-    };
     for (int i=0; i<n; i++) {
         for (int j=0; j<m; j++) {
-            if (comp[i][j]!=-1) continue;
             if (height(brd[i][j])>=2) continue;
-            makeComp(i, j);
+            if (comp[i][j]!=-1) continue;
+
+            queue<pair<int, int>> q;
+            q.push({i, j});
+            comp[i][j]=compNum;
+
+            while (!q.empty()) {
+                auto [y, x]=q.front();
+                q.pop();
+
+                for (int d=0; d<4; d++) {
+                    int ny=y+dy[d];
+                    int nx=x+dx[d];
+                    if (ny>=n || ny<0 || nx>=m || nx<0) continue;
+                    if (height(brd[ny][nx])!=height(brd[y][x])) continue;
+                    if (comp[ny][nx]!=-1) continue;
+
+                    comp[ny][nx]=compNum;
+                    q.push({ny, nx});
+                }
+            }
+
             compNum++;
         }
     }
 
-    vector<vector<vector<int>>> adjRamp(compNum);
+    vector<bool> isEnd(compNum, false);
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<m; j++) {
+            if (brd[i][j]=='P') isEnd[comp[i][j]]=true;
+            if (brd[i][j]=='B') isEnd[comp[i][j]]=true;
+        }
+    }
+
+    vector<pair<pair<int, int>, vector<int>>> rampPos;
     for (int i=0; i<n; i++) {
         for (int j=0; j<m; j++) {
             if (brd[i][j]!='?') continue;
 
+            vector<int> candidate;
             for (int d=0; d<4; d++) {
                 int ny=i+dy[d];
                 int nx=j+dx[d];
+                int py=i-dy[d];
+                int px=j-dx[d];
+
                 if (ny>=n || ny<0 || nx>=m || nx<0) continue;
+                if (py>=n || py<0 || px>=m || px<0) continue;
 
-                if (height(brd[ny][nx])<=1) {
-                    adjRamp[comp[ny][nx]].push_back({ny, nx, (d+2)%4});
+                if (height(brd[py][px])==0 && height(brd[ny][nx])==1) {
+                    candidate.push_back(d);
                 }
-            }   
-        }
-    }
-
-    int Pcomp=-1, Bcomp=-1;
-    for (int i=0; i<n; i++) {
-        for (int j=0; j<m; j++) {
-            if (brd[i][j]=='P') Pcomp=comp[i][j];
-            if (brd[i][j]=='B') Bcomp=comp[i][j];
-        }
-    }
-
-    vector<bool> vis(compNum, false);
-    function<void(int)> sol=[&](int nowComp) {
-        if (nowComp==Pcomp || nowComp==Bcomp) {
-            for (int i=0; i<n; i++) {
-                for (int j=0; j<m; j++) {
-                    if (brd[i][j]=='?') cout << 'N';
-                    else cout << brd[i][j];
-                }
-                cout << '\n';
             }
-            exit(0);
+
+            if (candidate.empty()) brd[i][j]='N';
+            else {
+                if ((int)candidate.size()==1) candidate.push_back(candidate[0]);
+                rampPos.push_back({{i, j}, candidate});
+            }
         }
+    }
 
-        vis[nowComp]=true;
+    bool flag=false;
+    int k=rampPos.size();
+    for (int i=0; i<(1<<k); i++) {
+        map<int, vector<int>> edge;
+        for (int j=0; j<k; j++) {
+            int jIni;
+            if ((i&(1<<j))) jIni=1;
+            else jIni=0;
+            auto [y, x]=rampPos[j].first;
+            int d=rampPos[j].second[jIni];
 
-        for (auto edge:adjRamp[nowComp]) {
-            int y=edge[0];
-            int x=edge[1];
-            int d=edge[2];
+            brd[y][x]=rampStr[d];
             int ny=y+dy[d];
             int nx=x+dx[d];
-            int nny=ny+dy[d];
-            int nnx=nx+dx[d];
-
-            if (brd[ny][nx]!='?') continue;
-            if (nny>=n || nny<0 || nnx>=m || nnx<0) continue;
-            if (height(brd[nny][nnx])>=2) continue;
-            if (height(brd[nny][nnx])==height(brd[y][x])) continue;
-            if (comp[nny][nnx]==comp[y][x]) continue;
-            if (comp[nny][nnx]==-1) continue;
-            if (vis[comp[nny][nnx]]==true) continue;
-
-            if (height(brd[y][x])==1) d=(d+2)%4;
-
-            brd[ny][nx]=rampStr[d];
-            sol(comp[nny][nnx]);
-            brd[ny][nx]='?';
+            int py=y-dy[d];
+            int px=x-dx[d];
+            edge[comp[py][px]].push_back(comp[ny][nx]);
+            edge[comp[ny][nx]].push_back(comp[py][px]);
         }
 
-        vis[nowComp]=false;
-    };
+        queue<int> q;
+        q.push(comp[sy][sx]);
+        vector<bool> vis(compNum, false);
+        vis[comp[sy][sx]]=true;
+        
+        while (!q.empty()) {
+            int now=q.front();
+            q.pop();
 
-    sol(comp[sy][sx]);
-    cout << -1;
+            if (isEnd[now]) {
+                flag=true;
+                break;
+            }
+
+            for (auto nxt:edge[now]) {
+                if (vis[nxt]) continue;
+                vis[nxt]=true;
+                q.push(nxt);
+            }
+        }
+
+        if (flag==true) break;
+    }
+
+    if (flag) for (auto s:brd) cout << s << '\n';
+    else cout << -1;
 
     return 0;
 }
