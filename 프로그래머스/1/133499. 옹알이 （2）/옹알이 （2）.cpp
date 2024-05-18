@@ -3,7 +3,6 @@ using namespace std;
 
 int solution(vector<string> words) {
     vector<string> token({"aya", "ye", "woo", "ma"});
-    // set<string> st;
     int ret=0;
     for (auto s:words) {
         bool canPronounce=true;
@@ -22,9 +21,7 @@ int solution(vector<string> words) {
                 break;
             }
         }
-        // if (canPronounce) st.insert(s);
         ret+=canPronounce;
     }
     return ret;
-    // return (int)st.size();
 }
