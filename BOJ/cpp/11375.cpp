@@ -1,40 +1,42 @@
 #include <bits/stdc++.h>
-#define rep(i, n) for(int i=0; i<(n); i++)
 using namespace std;
 
 int main() {
-	ios_base::sync_with_stdio(false); cin.tie(0);
+	ios_base::sync_with_stdio(0); cin.tie(0);
 
 	int n, m;
 	cin >> n >> m;
 	vector<vector<int>> edge(n);
-	rep(i, n) {
+	for (int i=0; i<n; i++) {
 		int k;
 		cin >> k;
-		edge[i].resize(k);
-		rep(j, k) {
+        while (k--) {
 			int a;
 			cin >> a;
-			edge[i][j]=a-1;
+            edge[i].push_back(a-1);
 		}
 	}
+
 	vector<bool> vis;
-	vector<int> a(m, -1);
-	function<bool(int)> dfs=[&](int from) {
-		for (auto to:edge[from]) {
-			if (vis[to]) continue;
-			vis[to]=true;
-			if (a[to]==-1 || dfs(a[to])) {
-				a[to]=from;
+	vector<int> par(m, -1);
+	function<bool(int)> dfs=[&](int now) {
+		for (auto nxt:edge[now]) {
+			if (vis[nxt]) continue;
+			vis[nxt]=true;
+
+			if (par[nxt]==-1 || dfs(par[nxt])) {
+				par[nxt]=now;
 				return true;
 			}
 		}
+
 		return false;
 	};
+
 	int ans=0;
-	rep(i, n) {
+	for (int i=0; i<n; i++) {
 		vis=vector<bool>(m, false);
-		ans+=!!dfs(i);
+		ans+=dfs(i);
 	}
 	cout << ans;
 
