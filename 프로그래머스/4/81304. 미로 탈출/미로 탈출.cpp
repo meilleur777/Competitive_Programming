@@ -3,6 +3,7 @@ using namespace std;
 
 const int inf=0x3f3f3f3f;
 
+//BFS optimized with Bitmasking
 int solution(int n, int start, int end, vector<vector<int>> roads, vector<int> traps) {
     start--, end--;
 

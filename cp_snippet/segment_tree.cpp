@@ -1,14 +1,14 @@
 vector<int> tree;
 
-void upd(int node, int left, int right, int ind, int x) {
+void update(int node, int left, int right, int ind, int x) {
 	if (ind<left || right<ind) return;
 	if (left==right) {
 		tree[node]=/*???*/
 		return;
 	}
 	int mid=(left+right)/2;
-	upd(node*2, left, mid, ind, x);
-	upd(node*2+1, mid+1, right, ind, x);
+	update(node*2, left, mid, ind, x);
+	update(node*2+1, mid+1, right, ind, x);
 	tree[node]=/*???*/
 }
 
