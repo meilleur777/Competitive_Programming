@@ -1,36 +1,19 @@
-#include <vector>
-#include <math.h>
-#include <limits.h>
-#include <string.h>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
-typedef pair<int, int> intp;
-
-const int MAX = 15 * 28 * 19 + 10;
-
 int main() {
-	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    ios_base::sync_with_stdio(0); cin.tie(0);
 	
-	int E, S, M;
-	cin >> E >> S >> M;
-	
-	for (int i = 1; i < MAX; i++) {
-		int a = i % 15;
-		a = (a) ? a : 15;
-		
-		int b = i % 28;
-		b = (b) ? b : 28;
-		
-		int c = i % 19;
-		c = (c) ? c : 19;
-		
-		if (a == E && b == S && c == M) {
-			cout << i;
-			return 0;
-		}	
-	}	
+	int e, s, m;
+	cin >> e >> s >> m;
+
+    for (int year=1;; year++) {
+        if (year%15==e%15 && year%28==s%28 && year%19==m%19) {
+            cout << year;
+            break;
+        }
+    }
+
+    return 0;
 }
 
