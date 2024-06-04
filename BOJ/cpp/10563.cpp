@@ -1,11 +1,5 @@
 #include <bits/stdc++.h>
-#define rep(i, n) for(int i=0; i<(n); i++)
 using namespace std;
-
-typedef long long ll;
-typedef pair<int, int> intp;
-
-typedef pair<pair<intp, intp>, int> ttt;
 
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
@@ -16,51 +10,39 @@ int main() {
         int n;
         cin >> n;
         vector<int> a(n);
-        rep(i, n) cin >> a[i];
+        for (int i=0; i<n; i++) cin >> a[i];
 
-        int one;
-        for (int i=0; i<n; i++) {
-            if (a[i]==1) {
-                one=i;
+        int pivot=find(a.begin(), a.end(), 1)-a.begin();
+
+        vector<vector<vector<int>>> cache(n, vector<vector<int>>(n, vector<int>(2, -1)));
+        function<bool(int, int, int)> dp=[&](int left, int right, int parity) {
+            if (left==right && left==pivot) {
+                return true;
             }
-        }
-        int leftptr=one;
-        int leftup=0;
-        while (leftptr>0 && a[leftptr-1]>a[leftptr]) {
-            leftptr--;
-            leftup++;
-        }
-        int lefttop=leftptr;
-        int leftdown=0;
-        while (leftptr>0 && a[leftptr-1]<a[leftptr]) {
-            leftptr--;
-            leftdown++;
-        }
 
-        int rightptr=one;
-        int rightup=0;
-        while (rightptr>0 && a[rightptr-1]>a[rightptr]) {
-            rightptr--;
-            rightup++;
-        }
-        int righttop=rightptr;
-        int rightdown=0;
-        while (rightptr>0 && a[rightptr-1]<a[rightptr]) {
-            rightptr--;
-            rightdown++;
-        }
+            int& ret=cache[left][right][parity];
+            if (ret!=-1) return !!ret;
 
-        map<ttt, bool> mp;
-        function<bool(int, int, int, int, int)> sol=[&](int leftdown, int left, int right, int rightdown, int other) {
-            if (left==right) return true;
-            
-            ttt tmp={{{leftdown%4, leftup%4}, {rightup%4, rightdown%4}}, other%4};
-            if (mp.find(tmp)!=mp.end()) {
-                return mp[tmp];
+            ret=0;
+            for (int i=left; i<pivot; i++) {
+                if ((i==left || a[i-1]<a[i]) && a[i]>a[i+1])  {
+                    ret|=!dp(i+1, right, (parity+i-left)%2);
+                }
             }
-            bool ret=false;
-            if (!sol(0, leftup-1, rightup, rightdown, other) || )
-        }
+            for (int i=pivot+1; i<=right; i++) {
+                if (a[i-1]<a[i] && (i==right || a[i]>a[i+1])) {
+                    ret|=!dp(left, i-1, (parity+right-i)%2);
+                }
+            }
+            if (parity==1) {
+                ret|=!dp(left, right, 0);
+            }
+
+            return !!ret;
+        };
+
+        if (dp(0, n-1, 0)) cout << "Alice\n";
+        else cout << "Bob\n";
     }
 
     return 0;
