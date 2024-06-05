@@ -9,19 +9,26 @@ long long power(long long a, long long b) {
     return tmp;
 }
 
-int main() {
-    ios_base::sync_with_stdio(0); cin.tie(0);
-    
-    vector<long long> prime;
-    vector<bool> isPrime(1e7+1, true);
+void sieve(int bound, vector<long long>& prime) {
+    vector<bool> isPrime(bound+1, true);
     isPrime[0]=isPrime[1]=false;
-    for (int i=2; i<=1e7; i++) {
+
+    for (int i=2; i<=bound; i++) {
         if (!isPrime[i]) continue;
         prime.push_back(i);
-        for (int j=i*2; j<=1e7; j+=i) {
+
+        for (int j=i*2; j<=bound; j+=i) {
             isPrime[j]=false;
         }
     }
+}
+
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    
+    const int bound=1e7;    
+    vector<long long> prime;
+    sieve(bound, prime);
 
     long long a, b;
     cin >> a >> b;
@@ -36,7 +43,7 @@ int main() {
             k++;
         }
     }
-    cout << ans;
+    cout << ans << '\n';
 
     return 0;
 }
